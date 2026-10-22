@@ -1,0 +1,89 @@
+README othello
+
+OVERVIEW:
+    Othello has 10 Java Classes and 1 interface (not including Constants or App),
+    and they interact in the following ways:
+        - PaneOrganizer manages and adds/removes all graphical elements of the screen.
+        PaneOrganizer instantiates Game in it's constructor. It also passes gamePane
+        into the game, which allows elements to be added without giving game access
+        to PaneOrganizer.
+        - The controls class sets up the righthand side control panel. This is done through
+        several buttons and labels that allow the player to customize their game. This
+        class also generates the two players and their types based of its button selections.
+        - SetUpGame handles several initial set up elements of the game.
+        It sets the controls to the gamePane and instantiates the referee and
+        board as instance variable. This class is in charge of assigning players from the
+        controls output. It starts the actual game, resets it, and applies palettes.
+        - The board class manages all logic related to the board and the Squares/pieces.
+        Apart from creating the actual board, this class holds all most all board
+        updating logic. This includes sandwich detection, valid move detection,
+        legal moves, gameover checking, and reseting the board. The board also has a
+        copy constructor. This is especially important for the minimax so it can create
+        fake boards to test moves out.
+        - The Square class represents all squares and pieces. Instead of using two
+        arrays for the two objects, it uses a "smart" approach to represent both
+        at the same time. It hands color detection, graphical changes, and piece
+        generation.
+        - The Piece class is a solely graphical class in charge of generating
+        the pieces. It has several getters and setters so that the piece's
+        colors can be flipped or switched via a palette.
+        - The Referee clas handles the turn taking and player logic, acting as a sort
+        of real referee. It decides who gets to go (since sometimes players need to skip).
+        It starts and stops timelines for computers and allows human players to click at
+        appropriate times. It also acts as an intermediary to decide if a turn is
+        valid for the player to take. Furthermore, the ref updates labels for
+        turn taking, score, and game over.
+        - The Player interface allows both the Computer and Human players to share methods
+        that may have unique functions. For example, make move is different for both classes
+        because one uses mouse and the other uses a minimax.
+        - HumanPlayer is the human version of the player and it implements the player
+        interface. The main difference is that it uses mouse action events to take turns.
+        The mouse's position is also detected to calculate where a piece needs to be placed.
+        - Computer player uses a recursive method with a minimax to calculate the best
+        move possible to make against there opponent. Depending on the difficulty level,
+        this algorithm may think as much as three turns ahead. Using a copy constructor, it
+        evaluates these moves and attempts to predict opponent's moves as well.
+        - Move is a class created to hold several variables describing a move. This includes
+        its position and value, it is useful for the minimax to store a lot of information in
+        one class.
+
+DESIGN CHOICES:
+        - I designed my turn-taking mechanism to exist within a four part loop. First,
+        the ref decides who goes using the decideMove method. Through a series of
+        if statements it detects if the game is over, if a player has run out of moves,
+        if it is a computer or human, etc. Then the selected player takes their turn. Using
+        the interface agreement, the player performs their respective move and sends it
+        to the ref to check its validity. The ref accesses several checking methods
+        from board to see if the move is valid, then the board proceeds to be updated.
+        This cycle continues. A design choice I would like to not is my use of recursion,
+        if a player needs to skip, the current player is swapped and the method calls
+        itself again, this time with a different player.
+        - Although an array would be simpler, it was really fun for me to use desmos
+        and generate two sin waves that perfectly correspond with the eight
+        way sandwich detection method. I know that this may be sub-optimal design,
+        but I couldn't resist!
+        - Originally, a lot of my board updating logic was in referee, but over time
+        I decided to put it into board. To make each class be distinct, I decided I would
+        leave ref to have logic similar to a ref in the real world. So referee is in charge
+        of calling who's turn, if its valid, who needs to skip, if its gameOver, etc.
+        - A lot of my logic in the referee class exists around instance variables
+        currentPlayer and nonCurrentPlayer. These two variables allow me to easily
+        switch turns and skip if no turns are detected since a lot of methods within
+        the class rely on checking which color the currentPlayer is.
+        - getbestMove is entirely instance variable free. This allows its calls to exist
+        entirely independently, with all its move and board generation and evaluation being
+        contained. This helped a lot with debugging, as no outside data could interfere with
+        the complex calculations that the method performs.
+
+EXTRA CREDIT:
+        - Snazzy graphics & Custom player colors: To make the board look more interesting,
+        I added a series of palettes that change how each of the graphical elements with colors
+        look. These palettes can be applied at anytime (although they reset the game). These
+        palettes are all stored in a Constants Array, and an array in Controls slickly adds
+        each one without much code. This makes the list very customizable, and more palettes
+        can be easily added.
+
+KNOWN BUGS: N/A
+
+How many hours did you spend on this assignment?
+Answer: 30 hrs
